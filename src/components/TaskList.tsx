@@ -16,14 +16,36 @@ export function TaskList() {
 
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+
+    if (!newTaskTitle) return; // Vai negar a 'newTaskTitle' ele não vai criar uma taks com valor vazio
+
+    const newTask = { // Criar um estado temporario 
+      id: Math.random(),
+      title: newTaskTitle,
+      isComplete: false
+    }
+
+    setTasks(oldState => [...oldState, newTask]); // Podemos usar o CallBack onde consigo pegar o valor antigo e atualizar ele, pegar o valor velho 'oldState'e adicionar um novo valor no 'newTask'
+    setNewTaskTitle(''); // Resetar ele para o começo ai sempre que for adicionado um novo item ele vai resetar o input
   }
 
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+
+    const newTasks = tasks.map(task => task.id == id ? {
+      ...task,
+      isComplete: !task.isComplete
+    } : task)
+
+    setTasks(newTasks)
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
+
+    const filteredTaks = tasks.filter(task => task.id != id);
+
+    setTasks(filteredTaks) // A gente nunca modifica o estado diretamento nos devemos 'criar um novo estado ao inves de editar um estado' 
   }
 
   return (
